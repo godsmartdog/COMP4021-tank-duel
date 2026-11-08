@@ -1,0 +1,25 @@
+<!-- Single-Page App containing Home/Lobby, Game Canvas, and Game Over views -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tank Duel</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <main id="app">
+      <section id="home-view" aria-label="Home and lobby">
+        <h1>Tank Duel</h1>
+      </section>
+      <section id="game-view" aria-label="Game" hidden>
+        <canvas id="game-canvas"></canvas>
+      </section>
+      <section id="game-over-view" aria-label="Game over" hidden>
+        <h2>Game Over</h2>
+      </section>
+    </main>
+    <script src="/socket.io/socket.io.js"></script>
+    <script type="module" src="js/main.js"></script>
+  </body>
+</html>

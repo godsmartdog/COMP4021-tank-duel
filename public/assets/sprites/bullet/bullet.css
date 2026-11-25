@@ -1,0 +1,14 @@
+.sprite {
+  display: inline-block;
+  background: url('bullet.png') no-repeat;
+  width: 114px;
+  height: 53px;
+}
+.sprite-0 { background-position: -0px -0px; }
+.sprite-1 { background-position: -114px -0px; }
+.sprite-2 { background-position: -228px -0px; }
+.sprite-3 { background-position: -342px -0px; }
+.sprite-4 { background-position: -0px -53px; }
+.sprite-5 { background-position: -114px -53px; }
+.sprite-6 { background-position: -228px -53px; }
+.sprite-7 { background-position: -342px -53px; }

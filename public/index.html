@@ -12,14 +12,82 @@
       <section id="home-view" aria-label="Home and lobby">
         <h1>Tank Duel</h1>
       </section>
+
       <section id="game-view" aria-label="Game" hidden>
         <canvas id="game-canvas"></canvas>
       </section>
+
+      <!--  Game Over View -->
       <section id="game-over-view" aria-label="Game over" hidden>
-        <h2>Game Over</h2>
+        <div class="io-gameover-backdrop">
+          <div class="io-gameover-card">
+
+            <!-- Top Outcome Ribbon & Match Conclusion -->
+            <header class="io-header">
+              <div id="go-outcome-pill" class="io-outcome-pill">MATCH COMPLETE</div>
+              <h1 id="go-title" class="io-title">VICTORY!</h1>
+              <p id="go-summary" class="io-subtitle">First to 3 Kills • 01:14</p>
+            </header>
+
+            <!-- 1v1 Head-to-Head Duel Scoreboard (Shell Shockers / Krunker style) -->
+            <div id="go-versus-card" class="io-versus-card"></div>
+
+            <!-- Personal Highlight KPI Tiles (Surviv.io style) -->
+            <div id="go-kpi-grid" class="io-kpi-grid"></div>
+
+            <!-- Two-Column Main Body: Left = Both Players' Match Stats | Right = Diep.io Ranking Bars -->
+            <div class="io-panels-grid">
+
+              <!-- Panel 1: Match Statistics for Both Players (10 Marks) -->
+              <div class="io-panel">
+                <div class="io-panel-header">
+                  <span>⚔️ MATCH BREAKDOWN</span>
+                  <span class="io-panel-tag">1v1 STATS</span>
+                </div>
+                <table class="io-stats-table">
+                  <thead>
+                    <tr>
+                      <th>PLAYER</th>
+                      <th>K / D</th>
+                      <th>SHOTS</th>
+                      <th>ACC</th>
+                      <th>RICOCHET</th>
+                      <th>ITEMS</th>
+                    </tr>
+                  </thead>
+                  <tbody id="go-stats-tbody"></tbody>
+                </table>
+              </div>
+
+              <!-- Panel 2: Diep.io Style Progress-Bar Leaderboard (10 Marks) -->
+              <div class="io-panel">
+                <div class="io-panel-header">
+                  <span>🏆 TOP COMMANDERS</span>
+                  <span class="io-panel-tag">GLOBAL RANK</span>
+                </div>
+                <div id="go-rank-list" class="io-rank-list"></div>
+              </div>
+
+            </div>
+
+            <!-- 3. Arcade 3D Action Buttons: Restart & Back to Home (10 Marks) -->
+            <p id="go-rematch-msg" class="io-rematch-msg"></p>
+            <div class="io-actions">
+              <button id="go-restart-btn" type="button" class="io-btn io-btn-primary">
+                ▶ PLAY AGAIN
+              </button>
+              <button id="go-home-btn" type="button" class="io-btn io-btn-secondary">
+                ⌂ HOME LOBBY
+              </button>
+            </div>
+
+          </div>
+        </div>
       </section>
     </main>
+
     <script src="/socket.io/socket.io.js"></script>
     <script type="module" src="js/main.js"></script>
   </body>
 </html>
+

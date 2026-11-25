@@ -1,4 +1,38 @@
 {
   "_comment": "Persistent user accounts + cumulative leaderboard stats",
-  "users": []
+  "users": [],
+  "tony": {
+    "avatar": "blue",
+    "name": "Tony Lee",
+    "password": "$argon2id$v=19$m=65536,t=3,p=4$gB3yJbDIa6PGKvjF39cAew$D6lAQLD9qDXll1OSwa76jQ8IS2FgeAFCVkixJoe12yg",
+    "stats": {
+      "wins": 1,
+      "losses": 0,
+      "draws": 0,
+      "gamesPlayed": 1,
+      "kills": 3,
+      "deaths": 1,
+      "shotsFired": 10,
+      "hits": 3,
+      "ricochetKills": 1,
+      "powerupsCollected": 2
+    }
+  },
+  "may": {
+    "avatar": "red",
+    "name": "May Wong",
+    "password": "$argon2id$v=19$m=65536,t=3,p=4$rlW5SAxIofzMQBQvd5sGxw$+CX7jR+pDzZIzzepV2L21lI8ake0V+LiN4/UhAj8Z6E",
+    "stats": {
+      "wins": 0,
+      "losses": 1,
+      "draws": 0,
+      "gamesPlayed": 1,
+      "kills": 1,
+      "deaths": 3,
+      "shotsFired": 8,
+      "hits": 1,
+      "ricochetKills": 0,
+      "powerupsCollected": 1
+    }
+  }
 }

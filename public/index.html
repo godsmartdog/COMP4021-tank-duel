@@ -54,10 +54,74 @@
           <p id="lobby-message" class="message"></p>
           <p id="lobby-ready" hidden style="color:#22c55e;font-weight:bold;font-size:1.5rem">READY</p>
         </div>
+
+        <button id="play-bot-button" type="button">Play vs Bot</button>
       </section>
 
       <section id="game-view" aria-label="Game" hidden>
-        <canvas id="game-canvas"></canvas>
+        <div class="gp-shell">
+          <!-- ==================== HUD ==================== -->
+          <header class="gp-hud">
+            <div class="gp-side gp-side--p1">
+              <div class="gp-avatar tank-blue" id="gp-p1-avatar">P1</div>
+              <div class="gp-id">
+                <div class="gp-name" id="gp-p1-name">Player 1</div>
+                <div class="gp-scoreline">
+                  <span class="gp-kills" id="gp-p1-kills">0</span>
+                  <span class="gp-pips" id="gp-p1-pips" aria-hidden="true"></span>
+                </div>
+                <div class="gp-badges" id="gp-p1-badges"></div>
+              </div>
+            </div>
+
+            <div class="gp-center">
+              <div class="gp-timer" id="gp-timer" role="timer" aria-live="off">3:00</div>
+              <div class="gp-goal" id="gp-goal">FIRST TO 3 KILLS</div>
+              <div class="gp-cheat-banner" id="gp-cheat-banner" hidden>⚡ CHEAT MODE</div>
+            </div>
+
+            <div class="gp-side gp-side--p2">
+              <div class="gp-avatar tank-red" id="gp-p2-avatar">P2</div>
+              <div class="gp-id">
+                <div class="gp-name" id="gp-p2-name">Player 2</div>
+                <div class="gp-scoreline">
+                  <span class="gp-pips" id="gp-p2-pips" aria-hidden="true"></span>
+                  <span class="gp-kills" id="gp-p2-kills">0</span>
+                </div>
+                <div class="gp-badges" id="gp-p2-badges"></div>
+              </div>
+            </div>
+
+            <div class="gp-tools">
+              <button id="gp-cheat-btn" class="gp-tool" type="button" title="Toggle cheat mode (C)" aria-label="Toggle cheat mode">⚡</button>
+              <button id="gp-mute-btn" class="gp-tool" type="button" title="Mute / unmute" aria-label="Mute or unmute sound">🔊</button>
+            </div>
+          </header>
+
+          <!-- ==================== ARENA ==================== -->
+          <div class="gp-stage" id="gp-stage">
+            <canvas id="game-canvas" width="1200" height="800"
+              aria-label="Tank arena. Use WASD to move, the mouse to aim, Space or click to shoot, and C for cheat mode."></canvas>
+
+            <div class="gp-overlay gp-overlay--countdown" id="gp-countdown" hidden>
+              <span id="gp-countdown-text">3</span>
+            </div>
+
+            <div class="gp-overlay gp-overlay--dead" id="gp-dead" hidden>
+              <div class="gp-dead-title">DESTROYED</div>
+              <div class="gp-dead-sub">Respawning in <span id="gp-respawn-in">2</span>…</div>
+            </div>
+
+            <div class="gp-killfeed" id="gp-killfeed" aria-live="polite"></div>
+            <div class="gp-toast" id="gp-toast" hidden></div>
+
+            <div class="gp-hint" id="gp-hint">
+              <kbd>WASD</kbd> move · <kbd>Mouse</kbd> aim · <kbd>Space</kbd>/<kbd>Click</kbd> shoot · <kbd>C</kbd> cheat
+            </div>
+
+            <div class="gp-connection" id="gp-connection" hidden>RECONNECTING…</div>
+          </div>
+        </div>
       </section>
 
       <!--  Game Over View -->

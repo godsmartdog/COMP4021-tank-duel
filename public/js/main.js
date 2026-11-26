@@ -1,8 +1,8 @@
 // View switching (Home <-> Game <-> GameOver) & Socket.IO client setup
-// View switching (Home <-> Game <-> GameOver) & Socket.IO client setup
 import { GameSprites } from "./sprite.js";
-import { GameAudio } from "./audio.js";
 import { GameOverUI } from "./gameover.js";
+import { HomePage } from "./home.js";
+import { PRACTICE, bootGame } from "./game_boot.js";
 
 // Console error self-check: writes OK or the error into #error-check.
 const consoleErrors = [];
@@ -35,44 +35,41 @@ function updateErrorCheck() {
 setInterval(updateErrorCheck, 500);
 window.addEventListener("load", updateErrorCheck);
 
-export const socket = window.io ? window.io() : null;
+// In practice mode there is no server match, so don't open a real socket.
+export const socket = (!PRACTICE && window.io) ? window.io() : null;
+if (!PRACTICE && !socket) consoleErrors.push("Socket.IO failed to load");
 
 export function showView(viewId) {
   document.querySelectorAll("main > section").forEach((view) => {
     view.hidden = view.id !== viewId;
   });
+  window.scrollTo(0, 0);
 }
 
-// Role 3: Preload sprites & bind Game Over screen to shared socket
+// Preload sprites and bind the game-over screen to the shared socket.
+// (Practice mode binds the game-over screen to the local match instead.)
 GameSprites.preload();
-GameOverUI.init(socket, {
-  showView,
-  onBackToHome: () => {
-    if (socket) socket.emit("getLobby");
-  }
-});
+if (!PRACTICE) {
+  GameOverUI.init(socket, {
+    showView,
+    onBackToHome: () => {
+      if (socket) socket.emit("getLobby");
+    }
+  });
+}
 
 window.showView = showView;
 window.socket = socket;
 
-// Role 2: auth callback + lobby signalling (additive).
-window.Auth.init((currentUser) => {
-  GameOverUI.setCurrentUser(currentUser);
-});
+if (!PRACTICE && socket) {
+  HomePage.init(socket);
 
-socket.on("lobbyReady", (data) => {
-  $("#lobby-ready").prop("hidden", false);
-  $("#lobby-message").text("READY - " + data.players.join(" vs "));
-});
+  window.Auth.init((currentUser) => {
+    const user = window.Auth.getUser() || currentUser;
+    GameOverUI.setCurrentUser(user);
+    HomePage.setUser(user);
+  });
+}
 
-socket.on("lobbyError", (message) => {
-  $("#lobby-message").text(message);
-});
-
-$("#join-lobby-button").on("click", () => {
-  const signedInUser = window.Auth.getUser();
-  if (!signedInUser) return;
-  $("#lobby-message").text("Waiting for another player...");
-  socket.emit("joinLobby", signedInUser.username);
-});
-
+// Canvas renderer, input, HUD and practice mode.
+bootGame(socket, showView);

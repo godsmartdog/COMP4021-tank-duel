@@ -12,6 +12,11 @@ export const PRACTICE = params.get("practice") === "1";
     if (tank) tank.file = `tank/tank_${color}/tank_${color}.png`;
 });
 
+// Power-up sheet rows: 0 shield, 1 purple triple-shot, 2 orange speed boost.
+if (GameSprites.CONFIG && GameSprites.CONFIG.powerup) {
+    GameSprites.CONFIG.powerup.rowsByType = { shield: 0, speed: 2, triple: 1 };
+}
+
 // "Play vs Bot" on the home screen opens the local practice mode.
 const playBotBtn = document.getElementById("play-bot-button");
 if (playBotBtn) {

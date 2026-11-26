@@ -55,14 +55,6 @@ const SPAWNS = [
   { x: 21 * 50 + 25, y: 7 * 50 + 25 }
 ];
 
-const PADS = [
-  { x: 12 * 50 + 25, y: 7 * 50 + 25 },
-  { x: 12 * 50 + 25, y: 2 * 50 + 25 },
-  { x: 12 * 50 + 25, y: 13 * 50 + 25 },
-  { x: 2 * 50 + 25, y: 12 * 50 + 25 },
-  { x: 21 * 50 + 25, y: 12 * 50 + 25 }
-];
-
 const WALLS = buildWalls(MAZE, CONFIG.tile);
 
 function buildWalls(rows, tile) {
@@ -278,7 +270,7 @@ export const LocalMatch = (function () {
         tickMs: CONFIG.tickMs
       },
       walls: WALLS,
-      pads: PADS,
+      pads: [],
       players: M.players.map((p) => ({
         username: p.username,
         name: p.name,
@@ -350,8 +342,8 @@ export const LocalMatch = (function () {
         M.phase = "playing";
         M.startedAt = now;
         M.events.push({ type: "fight" });
-        spawnPowerUp();
-        spawnPowerUp();
+        spawnPowerUp(now);
+        spawnPowerUp(now);
       }
       emitState(now);
       return;
@@ -727,31 +719,65 @@ export const LocalMatch = (function () {
   /* ------------------------------------------------------------------
    * Power-ups
    * ---------------------------------------------------------------- */
-  function spawnPowerUp() {
-    const free = PADS.filter(
-      (pad) =>
-        !M.powerups.some(
-          (item) => Math.hypot(item.x - pad.x, item.y - pad.y) < 30
-        )
-    );
-    if (!free.length) return;
+  function spawnPowerUp(now) {
+    const position = randomPowerUpPosition(now);
+    if (!position) return;
 
-    const pad = free[Math.floor(Math.random() * free.length)];
     const types = ["shield", "speed", "triple"];
     const type = types[Math.floor(Math.random() * types.length)];
 
     M.powerups.push({
       id: `p${M.nextPowerupId++}`,
-      x: pad.x,
-      y: pad.y,
+      x: position.x,
+      y: position.y,
       type
     });
+  }
+
+  // Pick a random open floor tile, away from walls, tanks and other power-ups.
+  function randomPowerUpPosition(now) {
+    const maxX = MAZE[0].length - 1;
+    const maxY = MAZE.length - 1;
+
+    for (let attempt = 0; attempt < 80; attempt++) {
+      const tx = 1 + Math.floor(Math.random() * (maxX - 1));
+      const ty = 1 + Math.floor(Math.random() * (maxY - 1));
+      if (MAZE[ty][tx] !== ".") continue;
+
+      const x = tx * CONFIG.tile + CONFIG.tile / 2;
+      const y = ty * CONFIG.tile + CONFIG.tile / 2;
+
+      // Keep the 30×30 sprite clear of walls.
+      if (circleHitsAny(x, y, 20)) continue;
+
+      if (
+        M.powerups.some(
+          (item) => Math.hypot(item.x - x, item.y - y) < 80
+        )
+      ) {
+        continue;
+      }
+
+      if (
+        M.players.some(
+          (p) =>
+            p.deadUntil <= now &&
+            Math.hypot(p.x - x, p.y - y) < 70
+        )
+      ) {
+        continue;
+      }
+
+      return { x, y };
+    }
+
+    return null;
   }
 
   function updatePowerups(now) {
     if (now >= M.nextPowerupAt) {
       M.nextPowerupAt = now + CONFIG.powerUpIntervalMs;
-      if (M.powerups.length < CONFIG.maxPowerUps) spawnPowerUp();
+      if (M.powerups.length < CONFIG.maxPowerUps) spawnPowerUp(now);
     }
 
     for (let i = M.powerups.length - 1; i >= 0; i--) {

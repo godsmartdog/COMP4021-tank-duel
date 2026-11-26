@@ -21,23 +21,35 @@ if (playBotBtn) {
 }
 
 function showPracticeHome() {
-    const authButtons = document.getElementById("auth-buttons");
-    if (authButtons) authButtons.hidden = true;
+    const authCard = document.getElementById("hs-auth-card");
+    if (authCard) authCard.hidden = true;
 
-    const playBotBtn = document.getElementById("play-bot-button");
-    if (playBotBtn) playBotBtn.hidden = true;
-
-    const signedInAs = document.getElementById("signed-in-as");
-    if (signedInAs) signedInAs.textContent = "Practice mode — play against the bot.";
+    const quickCard = document.getElementById("hs-quick-card");
+    if (quickCard) quickCard.hidden = true;
 
     const lobby = document.getElementById("lobby-section");
     if (lobby) lobby.hidden = false;
 
+    const heading = document.getElementById("hs-lobby-heading");
+    if (heading) heading.textContent = "Practice match";
+
+    const msg = document.getElementById("lobby-message");
+    if (msg) msg.textContent = "Practice mode — face the bot in a local match.";
+
     const joinBtn = document.getElementById("join-lobby-button");
-    if (joinBtn) joinBtn.textContent = "Start practice match";
+    if (joinBtn) {
+        joinBtn.textContent = "Start practice match";
+        joinBtn.disabled = false;
+    }
 
     const ready = document.getElementById("lobby-ready");
     if (ready) ready.hidden = true;
+
+    const dot = document.getElementById("hs-lobby-dot");
+    if (dot) dot.className = "hs-lobby-dot";
+
+    const radar = document.getElementById("hs-radar");
+    if (radar) radar.className = "hs-radar";
 }
 
 async function startPracticeMode(showView) {

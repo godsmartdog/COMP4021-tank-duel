@@ -4,58 +4,191 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tank Duel</title>
+    <title>Ricochet Rumble — Tank Duel</title>
     <link rel="stylesheet" href="style.css">
     <link rel="icon" href="data:,">
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   </head>
   <body>
     <main id="app">
-      <section id="home-view" aria-label="Home and lobby">
-        <h1>Tank Duel</h1>
-        <div id="error-check">Checking...</div>
+      <section id="home-view" aria-label="Game start">
+        <div class="hs-shell">
+          <header class="hs-hero">
+            <div class="hs-brand">
+              <div class="hs-mark" aria-hidden="true">RR</div>
+              <div class="hs-brand-copy">
+                <p class="hs-kicker">COMP 4021 · 1v1 Tank Maze Duel</p>
+                <h1>Ricochet Rumble</h1>
+                <p class="hs-tagline">Bank shots off the maze, grab power-ups, and out-duel your rival.</p>
+              </div>
+            </div>
+            <div class="hs-hero-badges">
+              <div class="hs-hero-badge"><strong>3</strong><span>Kills to win</span></div>
+              <div class="hs-hero-badge"><strong>3:00</strong><span>Time limit</span></div>
+              <div class="hs-hero-badge"><strong>1v1</strong><span>Live duel</span></div>
+            </div>
+          </header>
 
-        <div id="auth-buttons">
-          <button id="start-signin-button" type="button">Sign In</button>
-          <button id="start-register-button" type="button">Register</button>
+          <div class="hs-grid">
+            <div class="hs-main">
+              <section class="hs-card hs-card--how">
+                <div class="hs-card-head">
+                  <h2>How to play</h2>
+                  <span class="hs-chip">Arcade controls</span>
+                </div>
+                <div class="hs-controls">
+                  <div class="hs-control">
+                    <div class="hs-keys"><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd></div>
+                    <span>Move</span>
+                  </div>
+                  <div class="hs-control">
+                    <div class="hs-keys"><kbd>Mouse</kbd></div>
+                    <span>Aim turret</span>
+                  </div>
+                  <div class="hs-control">
+                    <div class="hs-keys"><kbd>Space</kbd><span class="hs-or">or</span><kbd>Click</kbd></div>
+                    <span>Shoot</span>
+                  </div>
+                </div>
+                <ul class="hs-rules">
+                  <li><span class="hs-rule-icon">⟲</span><span>Shells ricochet up to <strong>3 times</strong>; one hit destroys a tank.</span></li>
+                  <li><span class="hs-rule-icon">⏱</span><span>First to <strong>3 kills</strong> wins, or the highest score when <strong>3:00</strong> ends.</span></li>
+                  <li><span class="hs-rule-icon">✦</span><span>Power-ups spawn on the arena pads: Shield, Speed Boost, Triple Shot.</span></li>
+                </ul>
+              </section>
+
+              <section class="hs-card hs-card--powerups">
+                <div class="hs-card-head">
+                  <h2>Power-ups</h2>
+                  <span class="hs-chip">Spawn every 10 s</span>
+                </div>
+                <div class="hs-powerups">
+                  <article class="hs-powerup hs-powerup--shield">
+                    <div class="hs-powerup-icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24"><path d="M12 2.5 20 6v6.2c0 4.8-3.4 8.1-8 9.8-4.6-1.7-8-5-8-9.8V6l8-3.5Z"/></svg>
+                    </div>
+                    <div><h3>Shield</h3><p>Absorbs one incoming shell.</p></div>
+                  </article>
+                  <article class="hs-powerup hs-powerup--speed">
+                    <div class="hs-powerup-icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z"/></svg>
+                    </div>
+                    <div><h3>Speed Boost</h3><p>+50% movement for 8 seconds.</p></div>
+                  </article>
+                  <article class="hs-powerup hs-powerup--triple">
+                    <div class="hs-powerup-icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 21V9M12 9 5 3M12 9l7-6"/></svg>
+                    </div>
+                    <div><h3>Triple Shot</h3><p>Fires a 3-way volley for 8 seconds.</p></div>
+                  </article>
+                </div>
+              </section>
+
+              <section class="hs-card hs-card--leaderboard">
+                <div class="hs-card-head">
+                  <h2>Top commanders</h2>
+                  <span class="hs-chip">Global leaderboard</span>
+                </div>
+                <div id="hs-leaderboard" class="hs-lb-list">
+                  <p class="hs-muted">Loading leaderboard…</p>
+                </div>
+              </section>
+            </div>
+
+            <aside class="hs-side">
+              <section id="hs-auth-card" class="hs-card hs-card--auth">
+                <div id="hs-profile" class="hs-profile" hidden>
+                  <div id="hs-profile-avatar" class="hs-profile-avatar tank-blue">P</div>
+                  <div class="hs-profile-meta">
+                    <div id="hs-profile-name" class="hs-profile-name">Player</div>
+                    <div id="hs-profile-username" class="hs-profile-username">@player</div>
+                  </div>
+                  <span class="hs-online">Online</span>
+                </div>
+
+                <div id="hs-auth-guest">
+                  <h2>Enter the arena</h2>
+                  <p class="hs-muted">Sign in or create an account to pair up with a rival.</p>
+
+                  <div id="auth-buttons" class="hs-auth-actions">
+                    <button id="start-signin-button" class="hs-btn hs-btn-primary" type="button">Sign In</button>
+                    <button id="start-register-button" class="hs-btn hs-btn-ghost" type="button">Register</button>
+                  </div>
+
+                  <form id="register-form" class="hs-form" hidden>
+                    <h3>Create account</h3>
+                    <label for="register-username">Username</label>
+                    <input id="register-username" maxlength="10" autocomplete="username" placeholder="letters, numbers, _">
+                    <label for="register-avatar">Tank color</label>
+                    <select id="register-avatar">
+                      <option value="blue">Blue</option>
+                      <option value="red">Red</option>
+                      <option value="green">Green</option>
+                      <option value="yellow">Yellow</option>
+                    </select>
+                    <label for="register-name">Display name</label>
+                    <input id="register-name" maxlength="16" autocomplete="nickname" placeholder="Name shown in the arena">
+                    <label for="register-password">Password</label>
+                    <input id="register-password" type="password" autocomplete="new-password" placeholder="Password">
+                    <label for="register-confirm">Confirm password</label>
+                    <input id="register-confirm" type="password" autocomplete="new-password" placeholder="Repeat password">
+                    <div class="hs-form-actions">
+                      <button id="register-button" class="hs-btn hs-btn-primary" type="submit">Register</button>
+                      <button class="back-button hs-btn hs-btn-ghost" type="button">Back</button>
+                    </div>
+                    <p id="register-message" class="hs-message"></p>
+                  </form>
+
+                  <form id="signin-form" class="hs-form" hidden>
+                    <h3>Welcome back</h3>
+                    <label for="signin-username">Username</label>
+                    <input id="signin-username" autocomplete="username" placeholder="Username">
+                    <label for="signin-password">Password</label>
+                    <input id="signin-password" type="password" autocomplete="current-password" placeholder="Password">
+                    <div class="hs-form-actions">
+                      <button id="signin-button" class="hs-btn hs-btn-primary" type="submit">Sign In</button>
+                      <button class="back-button hs-btn hs-btn-ghost" type="button">Back</button>
+                    </div>
+                    <p id="signin-message" class="hs-message"></p>
+                  </form>
+                </div>
+
+                <p id="signed-in-as" class="hs-visually-hidden">Not signed in.</p>
+                <button id="signout-button" class="hs-btn hs-btn-ghost hs-signout" type="button" hidden>Sign Out</button>
+              </section>
+
+              <section id="lobby-section" class="hs-card hs-card--lobby" hidden aria-label="Matchmaking">
+                <div class="hs-card-head">
+                  <h2 id="hs-lobby-heading">Find a duel</h2>
+                  <span id="hs-lobby-dot" class="hs-lobby-dot" aria-hidden="true"></span>
+                </div>
+                <div class="hs-lobby-body">
+                  <div id="hs-radar" class="hs-radar" aria-hidden="true"><span></span></div>
+                  <div class="hs-lobby-copy">
+                    <p id="lobby-message" class="hs-lobby-message">Ready to search for an opponent.</p>
+                    <p id="lobby-ready" class="hs-lobby-ready" hidden></p>
+                    <p class="hs-muted hs-small">Two signed-in players are paired automatically.</p>
+                  </div>
+                </div>
+                <button id="join-lobby-button" class="hs-btn hs-btn-primary hs-lobby-btn" type="button">Find Match</button>
+              </section>
+
+              <section id="hs-quick-card" class="hs-card hs-card--quick">
+                <div class="hs-card-head">
+                  <h2>Quick play</h2>
+                  <span class="hs-chip">Offline</span>
+                </div>
+                <p class="hs-muted">Warm up against the practice bot before facing a rival.</p>
+                <button id="play-bot-button" class="hs-btn hs-btn-ghost" type="button">Play vs Bot</button>
+              </section>
+            </aside>
+          </div>
+
+          <footer class="hs-footer">
+            <span id="error-check">Checking...</span>
+            <span>COMP 4021 · Ricochet Rumble</span>
+          </footer>
         </div>
-
-        <form id="register-form" hidden>
-          <h2>Register</h2>
-          <input id="register-username" placeholder="Username" maxlength="10">
-          <select id="register-avatar">
-            <option value="blue">Blue</option>
-            <option value="red">Red</option>
-            <option value="green">Green</option>
-            <option value="yellow">Yellow</option>
-          </select>
-          <input id="register-name" placeholder="Name" maxlength="16">
-          <input id="register-password" type="password" placeholder="Password">
-          <input id="register-confirm" type="password" placeholder="Confirm password">
-          <button id="register-button" type="submit">Register</button>
-          <button class="back-button" type="button">Back</button>
-          <p id="register-message" class="message"></p>
-        </form>
-
-        <form id="signin-form" hidden>
-          <h2>Sign In</h2>
-          <input id="signin-username" placeholder="Username">
-          <input id="signin-password" type="password" placeholder="Password">
-          <button id="signin-button" type="submit">Sign In</button>
-          <button class="back-button" type="button">Back</button>
-          <p id="signin-message" class="message"></p>
-        </form>
-
-        <p id="signed-in-as">Not signed in.</p>
-        <button id="signout-button" type="button" hidden>Sign Out</button>
-
-        <div id="lobby-section" hidden>
-          <button id="join-lobby-button" type="button">Join the lobby</button>
-          <p id="lobby-message" class="message"></p>
-          <p id="lobby-ready" hidden style="color:#22c55e;font-weight:bold;font-size:1.5rem">READY</p>
-        </div>
-
-        <button id="play-bot-button" type="button">Play vs Bot</button>
       </section>
 
       <section id="game-view" aria-label="Game" hidden>

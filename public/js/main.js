@@ -1,6 +1,7 @@
 // View switching (Home <-> Game <-> GameOver) & Socket.IO client setup
 import { GameSprites } from "./sprite.js";
 import { GameOverUI } from "./gameover.js";
+import { HomePage } from "./home.js";
 import { PRACTICE, bootGame } from "./game_boot.js";
 
 // Console error self-check: writes OK or the error into #error-check.
@@ -42,6 +43,7 @@ export function showView(viewId) {
   document.querySelectorAll("main > section").forEach((view) => {
     view.hidden = view.id !== viewId;
   });
+  window.scrollTo(0, 0);
 }
 
 // Preload sprites and bind the game-over screen to the shared socket.
@@ -60,25 +62,12 @@ window.showView = showView;
 window.socket = socket;
 
 if (!PRACTICE && socket) {
-  // Auth callback + lobby signalling.
+  HomePage.init(socket);
+
   window.Auth.init((currentUser) => {
-    GameOverUI.setCurrentUser(currentUser);
-  });
-
-  socket.on("lobbyReady", (data) => {
-    $("#lobby-ready").prop("hidden", false);
-    $("#lobby-message").text("READY - " + data.players.join(" vs "));
-  });
-
-  socket.on("lobbyError", (message) => {
-    $("#lobby-message").text(message);
-  });
-
-  $("#join-lobby-button").on("click", () => {
-    const signedInUser = window.Auth.getUser();
-    if (!signedInUser) return;
-    $("#lobby-message").text("Waiting for another player...");
-    socket.emit("joinLobby", signedInUser.username);
+    const user = window.Auth.getUser() || currentUser;
+    GameOverUI.setCurrentUser(user);
+    HomePage.setUser(user);
   });
 }
 

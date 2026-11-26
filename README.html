@@ -1,13 +1,85 @@
-<!-- Clear instructions for TAs (Cheat key, accounts, how to run) -->
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>COMP4021 Tank Duel</title>
+    <title>Ricochet Rumble — TA Guide</title>
+    <style>
+      :root { color-scheme: dark; font-family: system-ui, sans-serif; }
+      body {
+        max-width: 760px;
+        margin: 0 auto;
+        padding: 32px 20px 48px;
+        background: #0b111e;
+        color: #e2e8f0;
+        line-height: 1.6;
+      }
+      h1, h2 { color: #f8fafc; }
+      h1 { margin: 0 0 4px; font-size: 1.9rem; }
+      h2 { margin: 26px 0 8px; font-size: 1.05rem; letter-spacing: .04em; text-transform: uppercase; color: #7dd3fc; }
+      p, li { color: #cbd5e1; }
+      code, kbd {
+        padding: 1px 6px;
+        border-radius: 5px;
+        background: #1e293b;
+        border: 1px solid #334155;
+        color: #f8fafc;
+        font-size: .9em;
+      }
+      ul, ol { padding-left: 22px; }
+      .note {
+        margin-top: 28px;
+        padding: 12px 14px;
+        border-radius: 10px;
+        border: 1px solid rgba(56, 189, 248, .35);
+        background: rgba(37, 99, 235, .12);
+        color: #bae6fd;
+      }
+    </style>
   </head>
   <body>
-    <h1>COMP4021 Tank Duel</h1>
-    <p>Instructions for TAs will be added here.</p>
+    <h1>Ricochet Rumble</h1>
+    <p>COMP 4021 1v1 tank maze duel — TA test guide.</p>
+
+    <h2>Run the project</h2>
+    <ol>
+      <li><code>npm install</code></li>
+      <li><code>node server.js</code></li>
+      <li>Open <code>http://localhost:8000</code></li>
+    </ol>
+
+    <h2>Test accounts</h2>
+    <ul>
+      <li><code>tony</code> / <code>t</code></li>
+      <li><code>may</code> / <code>m</code></li>
+    </ul>
+    <p>New accounts can also be registered on the start page.</p>
+
+    <h2>Controls</h2>
+    <ul>
+      <li><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> or arrow keys — move</li>
+      <li>Mouse — aim the turret</li>
+      <li><kbd>Space</kbd> or left click — shoot</li>
+      <li><kbd>C</kbd> — hidden cheat mode (invincible + rapid fire)</li>
+    </ul>
+
+    <h2>Pair up</h2>
+    <p>
+      Sign in with two different accounts in separate browsers or profiles.
+      On both start pages, click <strong>Find Match</strong>. The server pairs the
+      two players and starts the match on both browsers.
+    </p>
+
+    <h2>Practice mode</h2>
+    <p>
+      Click <strong>Play vs Bot</strong> on the start page, or open
+      <code>http://localhost:8000/?practice=1</code>, for a local match against
+      the practice bot.
+    </p>
+
+    <div class="note">
+      The start page lists the controls, match rules, power-ups and global
+      leaderboard. The cheat key is intentionally undocumented in the game UI.
+    </div>
   </body>
 </html>

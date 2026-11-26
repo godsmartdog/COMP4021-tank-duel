@@ -13,7 +13,46 @@
     <main id="app">
       <section id="home-view" aria-label="Home and lobby">
         <h1>Tank Duel</h1>
-        <div id="error-check">Checking...</div>
+
+        <div id="auth-buttons">
+          <button id="start-signin-button" type="button">Sign In</button>
+          <button id="start-register-button" type="button">Register</button>
+        </div>
+
+        <form id="register-form" hidden>
+          <h2>Register</h2>
+          <input id="register-username" placeholder="Username" maxlength="10">
+          <select id="register-avatar">
+            <option value="blue">Blue</option>
+            <option value="red">Red</option>
+            <option value="green">Green</option>
+            <option value="yellow">Yellow</option>
+          </select>
+          <input id="register-name" placeholder="Name" maxlength="16">
+          <input id="register-password" type="password" placeholder="Password">
+          <input id="register-confirm" type="password" placeholder="Confirm password">
+          <button id="register-button" type="submit">Register</button>
+          <button class="back-button" type="button">Back</button>
+          <p id="register-message" class="message"></p>
+        </form>
+
+        <form id="signin-form" hidden>
+          <h2>Sign In</h2>
+          <input id="signin-username" placeholder="Username">
+          <input id="signin-password" type="password" placeholder="Password">
+          <button id="signin-button" type="submit">Sign In</button>
+          <button class="back-button" type="button">Back</button>
+          <p id="signin-message" class="message"></p>
+        </form>
+
+        <p id="signed-in-as">Not signed in.</p>
+        <button id="signout-button" type="button" hidden>Sign Out</button>
+
+        <div id="lobby-section" hidden>
+          <button id="join-lobby-button" type="button">Join the lobby</button>
+          <p id="lobby-message" class="message"></p>
+          <p id="lobby-ready" hidden style="color:#22c55e;font-weight:bold;font-size:1.5rem">READY</p>
+        </div>
       </section>
 
       <section id="game-view" aria-label="Game" hidden>
@@ -90,6 +129,7 @@
     </main>
 
     <script src="/socket.io/socket.io.js"></script>
+    <script src="js/auth.js"></script>
     <script type="module" src="js/main.js"></script>
   </body>
 </html>

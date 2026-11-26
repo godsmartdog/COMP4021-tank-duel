@@ -77,7 +77,6 @@
             <div class="gp-center">
               <div class="gp-timer" id="gp-timer" role="timer" aria-live="off">3:00</div>
               <div class="gp-goal" id="gp-goal">FIRST TO 3 KILLS</div>
-              <div class="gp-cheat-banner" id="gp-cheat-banner" hidden>⚡ CHEAT MODE</div>
             </div>
 
             <div class="gp-side gp-side--p2">
@@ -93,7 +92,6 @@
             </div>
 
             <div class="gp-tools">
-              <button id="gp-cheat-btn" class="gp-tool" type="button" title="Toggle cheat mode (C)" aria-label="Toggle cheat mode">⚡</button>
               <button id="gp-mute-btn" class="gp-tool" type="button" title="Mute / unmute" aria-label="Mute or unmute sound">🔊</button>
             </div>
           </header>
@@ -101,7 +99,7 @@
           <!-- ==================== ARENA ==================== -->
           <div class="gp-stage" id="gp-stage">
             <canvas id="game-canvas" width="1200" height="800"
-              aria-label="Tank arena. Use WASD to move, the mouse to aim, Space or click to shoot, and C for cheat mode."></canvas>
+              aria-label="Tank arena. Use WASD to move, the mouse to aim, and Space or click to shoot."></canvas>
 
             <div class="gp-overlay gp-overlay--countdown" id="gp-countdown" hidden>
               <span id="gp-countdown-text">3</span>
@@ -116,7 +114,7 @@
             <div class="gp-toast" id="gp-toast" hidden></div>
 
             <div class="gp-hint" id="gp-hint">
-              <kbd>WASD</kbd> move · <kbd>Mouse</kbd> aim · <kbd>Space</kbd>/<kbd>Click</kbd> shoot · <kbd>C</kbd> cheat
+              <kbd>WASD</kbd> move · <kbd>Mouse</kbd> aim · <kbd>Space</kbd>/<kbd>Click</kbd> shoot
             </div>
 
             <div class="gp-connection" id="gp-connection" hidden>RECONNECTING…</div>

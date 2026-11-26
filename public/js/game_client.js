@@ -169,8 +169,6 @@ export const GameClient = (function () {
       S.hud.connection.hidden = true;
       S.hud.dead.hidden = true;
       S.hud.countdown.hidden = true;
-      S.hud.cheatBanner.hidden = true;
-      S.hud.cheatBtn.classList.remove("is-on");
       S.hud.timer.className = "gp-timer";
       S.hud.timer.textContent = formatTime(S.config.matchSeconds);
       S.hud.goal.textContent = `FIRST TO ${S.config.killsToWin} KILLS`;
@@ -215,7 +213,6 @@ export const GameClient = (function () {
         hasShield: false,
         speedBoost: false,
         tripleShot: false,
-        cheatMode: false,
         isDead: false,
         respawnIn: 0,
         invulnerable: false
@@ -315,9 +312,6 @@ export const GameClient = (function () {
     }
 
     if (S.hud) {
-      S.hud.cheatBtn.addEventListener("click", () => {
-        if (S.running && S.net) S.net.emit("toggleCheat");
-      });
       S.hud.muteBtn.addEventListener("click", toggleMute);
     }
   }
@@ -501,15 +495,6 @@ export const GameClient = (function () {
 
     // 4. Bullets
     bullets.forEach((b) => {
-      if (b.cheat) {
-        ctx.save();
-        ctx.globalAlpha = 0.5;
-        ctx.fillStyle = "#facc15";
-        ctx.beginPath();
-        ctx.arc(b.x, b.y, 11, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.restore();
-      }
       GameSprites.drawBullet(ctx, { id: b.id, x: b.x, y: b.y, vx: b.vx, vy: b.vy }, now);
     });
 
@@ -524,7 +509,7 @@ export const GameClient = (function () {
       const k = 1 - age / 120;
       ctx.save();
       ctx.globalAlpha = k;
-      ctx.fillStyle = f.cheat ? "#facc15" : "#fde68a";
+      ctx.fillStyle = "#fde68a";
       ctx.beginPath();
       ctx.arc(f.x, f.y, 4 + 9 * k, 0, Math.PI * 2);
       ctx.fill();
@@ -550,7 +535,7 @@ export const GameClient = (function () {
     }
 
     // 9. Crosshair
-    drawCrosshair(ctx, players, now);
+    drawCrosshair(ctx);
   }
 
   function drawTank(ctx, p, now) {
@@ -567,8 +552,7 @@ export const GameClient = (function () {
         color: validColor(p.color),
         isMoving: !!p.isMoving,
         hasShield: !!p.hasShield,
-        speedBoost: !!p.speedBoost,
-        cheatMode: !!p.cheatMode
+        speedBoost: !!p.speedBoost
       },
       now
     );
@@ -624,7 +608,7 @@ export const GameClient = (function () {
     }
 
     ctx.save();
-    ctx.strokeStyle = me.cheatMode ? "rgba(250, 204, 21, 0.8)" : "rgba(125, 211, 252, 0.6)";
+    ctx.strokeStyle = "rgba(125, 211, 252, 0.6)";
     ctx.lineWidth = 2;
     ctx.setLineDash([6, 6]);
     ctx.lineDashOffset = -(now / 45) % 12;
@@ -633,17 +617,16 @@ export const GameClient = (function () {
     ctx.lineTo(ex, ey);
     ctx.stroke();
     ctx.setLineDash([]);
-    ctx.fillStyle = me.cheatMode ? "#facc15" : "#7dd3fc";
+    ctx.fillStyle = "#7dd3fc";
     ctx.beginPath();
     ctx.arc(ex, ey, 3, 0, Math.PI * 2);
     ctx.fill();
     ctx.restore();
   }
 
-  function drawCrosshair(ctx, players, now) {
+  function drawCrosshair(ctx) {
     if (!S.mouse.inside) return;
-    const me = players.find((p) => p.username === S.you);
-    const color = me && me.cheatMode ? "#facc15" : "rgba(226, 232, 240, 0.9)";
+    const color = "rgba(226, 232, 240, 0.9)";
     const { x, y } = S.mouse;
 
     ctx.save();
@@ -673,8 +656,6 @@ export const GameClient = (function () {
     S.hud = {
       timer: byId("gp-timer"),
       goal: byId("gp-goal"),
-      cheatBanner: byId("gp-cheat-banner"),
-      cheatBtn: byId("gp-cheat-btn"),
       muteBtn: byId("gp-mute-btn"),
 
       p1Avatar: byId("gp-p1-avatar"),
@@ -768,13 +749,6 @@ export const GameClient = (function () {
     S.hud.timer.className =
       "gp-timer" + (t <= 10 ? " is-critical" : t <= 30 ? " is-warning" : "");
 
-    const cheater = players.find((p) => p.cheatMode);
-    S.hud.cheatBanner.hidden = !cheater;
-    if (cheater) {
-      S.hud.cheatBanner.textContent = `⚡ CHEAT MODE — ${cheater.name || cheater.username}`;
-    }
-    S.hud.cheatBtn.classList.toggle("is-on", !!(me && me.cheatMode));
-
     if (me && me.isDead) {
       S.hud.dead.hidden = false;
       S.hud.respawnIn.textContent = Math.max(0, Math.ceil(Number(me.respawnIn) || 0));
@@ -794,7 +768,6 @@ export const GameClient = (function () {
   function renderBadges(el, p) {
     if (!el) return;
     const parts = [];
-    if (p.cheatMode) parts.push(`<span class="gp-badge gp-badge--cheat">CHEAT</span>`);
     if (p.hasShield) {
       parts.push(`<span class="gp-badge gp-badge--shield">🛡 ${secondsLabel(p.shieldRemaining)}</span>`);
     }
@@ -848,7 +821,7 @@ export const GameClient = (function () {
           const sx = Number(e.x);
           const sy = Number(e.y);
           if (Number.isFinite(sx) && Number.isFinite(sy)) {
-            S.flashes.push({ x: sx, y: sy, cheat: !!e.cheat, t: now });
+            S.flashes.push({ x: sx, y: sy, t: now });
           }
           break;
         }
@@ -885,12 +858,6 @@ export const GameClient = (function () {
         case "powerup": {
           playSound("powerup");
           showToast(`${nameOf(e.by)} picked up ${String(e.kind || "power-up").toUpperCase()}`);
-          break;
-        }
-        case "cheat": {
-          showToast(
-            `${nameOf(e.by)} ${e.on ? "activated" : "deactivated"} CHEAT MODE`
-          );
           break;
         }
         case "matchPoint": {

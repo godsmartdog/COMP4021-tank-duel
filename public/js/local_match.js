@@ -313,7 +313,6 @@ export const LocalMatch = (function () {
     if (!M || M.phase === "ended") return;
     const p = M.players[0];
     p.cheatMode = !p.cheatMode;
-    M.events.push({ type: "cheat", by: p.username, on: p.cheatMode });
   }
 
   function onRematch() {

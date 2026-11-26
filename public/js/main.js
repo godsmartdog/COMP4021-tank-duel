@@ -55,3 +55,24 @@ GameOverUI.init(socket, {
 window.showView = showView;
 window.socket = socket;
 
+// Role 2: auth callback + lobby signalling (additive).
+window.Auth.init((currentUser) => {
+  GameOverUI.setCurrentUser(currentUser);
+});
+
+socket.on("lobbyReady", (data) => {
+  $("#lobby-ready").prop("hidden", false);
+  $("#lobby-message").text("READY - " + data.players.join(" vs "));
+});
+
+socket.on("lobbyError", (message) => {
+  $("#lobby-message").text(message);
+});
+
+$("#join-lobby-button").on("click", () => {
+  const signedInUser = window.Auth.getUser();
+  if (!signedInUser) return;
+  $("#lobby-message").text("Waiting for another player...");
+  socket.emit("joinLobby", signedInUser.username);
+});
+
